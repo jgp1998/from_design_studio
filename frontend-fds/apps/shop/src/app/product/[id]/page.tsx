@@ -1,13 +1,14 @@
 "use client";
 
 import { ShoppingCart, Check } from 'lucide-react';
-import { useState } from 'react';
+import { useState, use } from 'react';
 import { mockProducts } from '@repo/ui/mockData';
 import { Header } from '@repo/ui/Header';
 import Link from 'next/link';
 
-export default function ProductDetail({ params }: { params: { id: string } }) {
-    const product = mockProducts.find(p => p.id === params.id);
+export default function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
+    const product = mockProducts.find(p => p.id === id);
     const [configuration, setConfiguration] = useState({
         size: 'Medium',
         color: 'Blue',

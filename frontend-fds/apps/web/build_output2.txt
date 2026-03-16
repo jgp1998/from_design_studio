@@ -1,0 +1,24 @@
+
+> web@0.1.0 build D:\proyectos\descartados\fds\from_design_studio\frontend-fds\apps\web
+> next build
+
+▲ Next.js 16.1.5 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1487.6ms
+  Running TypeScript ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/4) ...
+  Generating static pages using 15 workers (1/4) 
+  Generating static pages using 15 workers (2/4) 
+  Generating static pages using 15 workers (3/4) 
+✓ Generating static pages using 15 workers (4/4) in 524.6ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+└ ○ /_not-found
+
+
+○  (Static)  prerendered as static content
+

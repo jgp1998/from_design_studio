@@ -1,0 +1,5 @@
+export enum DocumentType {
+  SII_RUT = 'SII_RUT',
+  CONSTITUCION_EMPRESA = 'CONSTITUCION_EMPRESA',
+  OTHER = 'OTHER',
+}

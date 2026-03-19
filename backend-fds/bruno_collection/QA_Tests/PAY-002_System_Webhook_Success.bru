@@ -1,0 +1,23 @@
+meta {
+  name: PAY-002_System_Webhook_Success
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/api/v1/webhooks/payments/MP_123
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "status": "approved"
+  }
+}
+
+tests {
+  test("PAY-002: HTTP 201, Order changes status on webhook", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

@@ -1,0 +1,17 @@
+meta {
+  name: AUTH-003_No_Token_Access_Denied
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/orders
+  body: none
+  auth: none
+}
+
+tests {
+  test("AUTH-003: Returns 401 Unauthorized when no token is provided", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+}

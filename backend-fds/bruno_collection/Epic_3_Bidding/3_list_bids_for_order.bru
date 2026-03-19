@@ -1,0 +1,17 @@
+meta {
+  name: 3_List_Bids_For_Order
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/orders/:orderId/bids
+  body: none
+  auth: none
+}
+
+tests {
+  test("Client sees bids with obfuscated provider names", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

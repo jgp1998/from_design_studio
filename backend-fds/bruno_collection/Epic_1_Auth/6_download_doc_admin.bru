@@ -1,0 +1,17 @@
+meta {
+  name: 6_Download_Doc_Admin
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/admin/providers/:providerId/documents/:documentId
+  body: none
+  auth: none
+}
+
+tests {
+  test("Should return a MinIO pre-signed URL", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

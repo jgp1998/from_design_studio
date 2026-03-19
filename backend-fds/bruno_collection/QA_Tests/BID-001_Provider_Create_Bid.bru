@@ -1,0 +1,28 @@
+meta {
+  name: BID-001_Provider_Create_Bid
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/v1/orders/ORD-TEST-123/bids
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{provider_token}}
+}
+
+body:json {
+  {
+    "bidAmountClp": 15000,
+    "productionDays": 3
+  }
+}
+
+tests {
+  test("BID-001: HTTP 201 and object Bid created", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

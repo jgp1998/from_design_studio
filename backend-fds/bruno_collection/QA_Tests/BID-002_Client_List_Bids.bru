@@ -1,0 +1,22 @@
+meta {
+  name: BID-002_Client_List_Bids
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/api/v1/orders/ORD-TEST-123/bids
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{client_token}}
+}
+
+tests {
+  test("BID-002: HTTP 200, Array with bids", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.be.an('array');
+  });
+}

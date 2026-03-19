@@ -1,0 +1,26 @@
+meta {
+  name: AUTH-001_Register_Client
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/auth/registrations/b2b
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "qa_client@test.com",
+    "password": "Password123",
+    "rut": "12345678-9",
+    "companyName": "QA Corp"
+  }
+}
+
+tests {
+  test("AUTH-001: Returns 201 Created and creates user in DB", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "FDS API Backlog",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

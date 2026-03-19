@@ -1,0 +1,22 @@
+meta {
+  name: ORD-002_List_Orders
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/v1/orders
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{client_token}}
+}
+
+tests {
+  test("ORD-002: Returns an array of orders associated with the client", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.be.an('array');
+  });
+}

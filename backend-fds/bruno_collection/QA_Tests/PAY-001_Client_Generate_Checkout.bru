@@ -1,0 +1,22 @@
+meta {
+  name: PAY-001_Client_Generate_Checkout
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/api/v1/orders/ORD-TEST-123/checkouts
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{client_token}}
+}
+
+tests {
+  test("PAY-001: HTTP 201, returns payment URL", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody().paymentUrl).to.be.a('string');
+  });
+}

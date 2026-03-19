@@ -1,0 +1,23 @@
+meta {
+  name: BID-003_Client_Accept_Bid
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/orders/ORD-TEST-123/bids/BID-TEST-123/status
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{client_token}}
+}
+
+tests {
+  test("BID-003: HTTP 200, successfully accepted", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().ok).to.be.true;
+    expect(res.getBody().message).to.equal("Bid accepted and others rejected");
+  });
+}

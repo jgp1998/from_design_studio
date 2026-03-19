@@ -1,0 +1,24 @@
+meta {
+  name: 1_Init_Upload_CAD
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/orders/files/presigned-url
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "file_name": "pieza_auto.stl",
+    "file_size": 2048576
+  }
+}
+
+tests {
+  test("Should generate presigned POST URL and file record", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

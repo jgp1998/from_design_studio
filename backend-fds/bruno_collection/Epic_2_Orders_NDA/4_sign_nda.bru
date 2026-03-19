@@ -1,0 +1,23 @@
+meta {
+  name: 4_Sign_NDA
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/orders/:orderId/nda-signatures
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "accepted_terms": true
+  }
+}
+
+tests {
+  test("Should record NDASignature for provider", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

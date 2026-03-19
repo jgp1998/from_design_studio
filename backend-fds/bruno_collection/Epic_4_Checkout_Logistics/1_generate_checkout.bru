@@ -1,0 +1,17 @@
+meta {
+  name: 1_Generate_Checkout
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/orders/:orderId/checkouts
+  body: none
+  auth: none
+}
+
+tests {
+  test("Should return payment URL from Gateway", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

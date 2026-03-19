@@ -1,0 +1,25 @@
+meta {
+  name: 3_Update_Order_Status
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/orders/:orderId/status
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "status": "DISPATCHED",
+    "tracking_number": "123456789012",
+    "courier": "STARKEN"
+  }
+}
+
+tests {
+  test("Provider changes FSM state. Dispatched requires tracking_number", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

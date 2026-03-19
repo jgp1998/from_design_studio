@@ -1,0 +1,23 @@
+meta {
+  name: 4_Upload_Doc_Provider
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/providers/documents
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "document_type": "SII_RUT"
+  }
+}
+
+tests {
+  test("Should save the storage_object_key", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

@@ -1,0 +1,30 @@
+meta {
+  name: ORD-001_Create_Order
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{client_token}}
+}
+
+body:json {
+  {
+    "designFileUrl": "http://example.com/file.stl",
+    "materialId": "PLA",
+    "quantity": 1
+  }
+}
+
+tests {
+  test("ORD-001: Returns 201 Created and ID of order", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody().status).to.equal('Awaiting Bids');
+  });
+}

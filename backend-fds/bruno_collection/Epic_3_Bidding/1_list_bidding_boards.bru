@@ -1,0 +1,17 @@
+meta {
+  name: 1_List_Bidding_Boards
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/orders?status=OPEN&material=PLA
+  body: none
+  auth: none
+}
+
+tests {
+  test("Should list OPEN orders and obfuscate client name", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

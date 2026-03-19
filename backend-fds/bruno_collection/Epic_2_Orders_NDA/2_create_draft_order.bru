@@ -1,0 +1,26 @@
+meta {
+  name: 2_Create_Draft_Order
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/orders
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "file_id": "uuid-here",
+    "material": "PLA",
+    "color": "BLACK",
+    "infill_percentage": 20
+  }
+}
+
+tests {
+  test("Should create DRAFT WorkOrder", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

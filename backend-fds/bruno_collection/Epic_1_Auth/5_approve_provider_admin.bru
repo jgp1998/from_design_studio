@@ -1,0 +1,23 @@
+meta {
+  name: 5_Approve_Provider_Admin
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/admin/providers/:id/status
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "status": "ACTIVE"
+  }
+}
+
+tests {
+  test("Admin should be able to approve provider", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

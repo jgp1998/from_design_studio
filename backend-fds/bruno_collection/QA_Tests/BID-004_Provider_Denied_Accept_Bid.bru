@@ -1,0 +1,21 @@
+meta {
+  name: BID-004_Provider_Denied_Accept_Bid
+  type: http
+  seq: 9
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/orders/ORD-TEST-123/bids/BID-TEST-123/status
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{provider_token}}
+}
+
+tests {
+  test("BID-004: HTTP 403 Forbidden since provider cannot accept a bid", function() {
+    expect(res.getStatus()).to.equal(403);
+  });
+}

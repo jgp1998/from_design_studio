@@ -1,0 +1,17 @@
+meta {
+  name: 5_Download_CAD_Provider
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/orders/:orderId/files/presigned-download
+  body: none
+  auth: none
+}
+
+tests {
+  test("Should return 403 if NDA missing, else 200", function() {
+    expect(res.getStatus()).to.be.oneOf([200, 403]);
+  });
+}

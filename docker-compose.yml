@@ -1,0 +1,141 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: fds-postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fds-network
+
+  minio:
+    image: minio/minio:latest
+    container_name: fds-minio
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address ":9001"
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - fds-network
+
+  minio-setup:
+    image: minio/mc
+    container_name: fds-minio-setup
+    depends_on:
+      minio:
+        condition: service_healthy
+    env_file:
+      - .env
+    entrypoint: >
+      /bin/sh -c " /usr/bin/mc alias set myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; /usr/bin/mc mb myminio/${MINIO_BUCKET} --ignore-existing; /usr/bin/mc anonymous set public myminio/${MINIO_BUCKET}; exit 0; "
+    networks:
+      - fds-network
+
+  backend:
+    build:
+      context: ../backend-fds
+      target: development
+    container_name: fds-backend
+    restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      MINIO_ENDPOINT: minio
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend-fds:/app
+      - /app/node_modules
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - fds-network
+
+  landing:
+    build:
+      context: ../frontend-fds
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: landing
+    ports:
+      - "3030:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - fds-network
+
+  web:
+    build:
+      context: ../frontend-fds
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: web
+    ports:
+      - "3031:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - fds-network
+
+  shop:
+    build:
+      context: ../frontend-fds
+      dockerfile: Dockerfile
+      args:
+        APP_NAME: shop
+    ports:
+      - "3032:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - fds-network
+
+networks:
+  fds-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  minio_data:

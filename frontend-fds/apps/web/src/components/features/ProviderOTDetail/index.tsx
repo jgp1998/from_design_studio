@@ -1,15 +1,18 @@
 import { Shield, Download, Check, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
-import { ViewType } from '../types';
-import { mockAvailableWorkOrders } from '../mockData';
+import type { ViewType } from '../../../types';
+import { mockAvailableWorkOrders } from '../../../mockData';
+
+import { useRouter } from 'next/navigation';
+import { API } from '../../../api';
 
 interface ProviderOTDetailProps {
-    selectedWOId: string;
-    onViewChange: (view: ViewType) => void;
+    orderId: string;
 }
 
-export function ProviderOTDetail({ selectedWOId, onViewChange }: ProviderOTDetailProps) {
-    const workOrder = mockAvailableWorkOrders.find(wo => wo.id === selectedWOId);
+export function ProviderOTDetail({ orderId }: ProviderOTDetailProps) {
+    const router = useRouter();
+    const workOrder = mockAvailableWorkOrders.find(wo => wo.id === orderId);
     const [ndaAccepted, setNdaAccepted] = useState(false);
     const [fileDownloaded, setFileDownloaded] = useState(false);
     const [offerData, setOfferData] = useState({
@@ -26,18 +29,39 @@ export function ProviderOTDetail({ selectedWOId, onViewChange }: ProviderOTDetai
         );
     }
 
-    const handleDownload = () => {
+    const handleDownload = async () => {
         if (ndaAccepted) {
-            setFileDownloaded(true);
+            try {
+                // 1. Sign NDA explicitly
+                await API.Orders.signNDA(orderId);
+                // 2. Obtain download URL
+                const response = await API.Orders.getDownloadUrl(orderId);
+                console.log("Download authorized. File URL:", response.url);
+                // window.open(response.url, '_blank');
+                
+                setFileDownloaded(true);
+            } catch (error) {
+                console.error("Failed to sign NDA or download", error);
+                alert("Error authenticating NDA. Please try again.");
+            }
         }
     };
 
-    const handleSubmitOffer = (e: React.FormEvent) => {
+    const handleSubmitOffer = async (e: React.FormEvent) => {
         e.preventDefault();
-        setShowSuccess(true);
-        setTimeout(() => {
-            onViewChange('provider-dashboard');
-        }, 2000);
+        try {
+            await API.Bidding.createBid(orderId, {
+                price_clp: parseFloat(offerData.price),
+                estimated_days: parseInt(offerData.deliveryTime)
+            });
+            setShowSuccess(true);
+            setTimeout(() => {
+                router.push('/dashboard/provider');
+            }, 2000);
+        } catch (error) {
+            console.error("Failed to submit bid", error);
+            alert("Error submitting your offer.");
+        }
     };
 
     if (showSuccess) {
@@ -61,7 +85,7 @@ export function ProviderOTDetail({ selectedWOId, onViewChange }: ProviderOTDetai
         <div className="min-h-screen bg-slate-50 py-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <button
-                    onClick={() => onViewChange('provider-dashboard')}
+                    onClick={() => router.push('/dashboard/provider')}
                     className="text-indigo-600 hover:text-indigo-800 font-medium mb-6 inline-flex items-center"
                 >
                     ← Back to Available Jobs

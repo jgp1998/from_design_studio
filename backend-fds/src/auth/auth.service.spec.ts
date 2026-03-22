@@ -96,12 +96,15 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('should return access token', async () => {
+    it('should return user and token', async () => {
       mockUsersService.findByEmail.mockResolvedValue({ id: 'usr', email: 'mail', passwordHash: 'hash', role: 'CLIENT' });
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
       const res = await service.login({ email: 'mail', password: 'pass' });
       expect(mockJwtService.sign).toHaveBeenCalledWith({ email: 'mail', sub: 'usr', role: 'CLIENT' });
-      expect(res).toEqual({ access_token: 'mocked_jwt_token' });
+      expect(res).toEqual({
+        token: 'mocked_jwt_token',
+        user: { id: 'usr', email: 'mail', role: 'CLIENT' },
+      });
     });
   });
 });

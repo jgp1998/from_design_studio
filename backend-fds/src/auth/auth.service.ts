@@ -84,7 +84,7 @@ export class AuthService {
     return result;
   }
 
-  async login(dto: LoginDto): Promise<{ access_token: string }> {
+  async login(dto: LoginDto): Promise<{ token: string; user: { id: string; email: string; role: string } }> {
     const user = await this.validateUser(dto.email, dto.password);
 
     // We can also check if user is SUSPENDED or PENDING_APPROVAL here
@@ -97,7 +97,12 @@ export class AuthService {
 
     const payload = { email: user.email, sub: user.id, role: user.role };
     return {
-      access_token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
     };
   }
 }

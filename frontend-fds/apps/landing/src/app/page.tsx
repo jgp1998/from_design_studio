@@ -47,22 +47,29 @@ export default function LandingPage() {
                         </p>
 
                         {/* CTAs */}
-                        <div className="flex flex-col sm:flex-row gap-5 justify-center w-full sm:w-auto">
+                        <div className="flex flex-col sm:flex-row gap-5 justify-center w-full sm:w-auto flex-wrap">
                             <Link
-                                href={`${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3031'}/bidding/new`}
+                                href={`${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3031'}/register/b2b`}
                                 className="group relative bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 shadow-[0_0_40px_-10px_rgba(79,70,229,0.5)] hover:shadow-[0_0_60px_-15px_rgba(79,70,229,0.7)] hover:-translate-y-1"
                             >
                                 <Lock className="w-5 h-5 text-indigo-200" />
                                 <span>Cotizar Pieza Segura</span>
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Link>
-                            
+
                             <Link
-                                href={`${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3031'}/supplier/onboarding`}
+                                href={`${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3031'}/register/provider`}
                                 className="group bg-slate-800/80 hover:bg-slate-700 text-white border border-slate-600 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 backdrop-blur-sm hover:-translate-y-1"
                             >
                                 <Factory className="w-5 h-5 text-slate-400" />
                                 <span>Quiero ser Proveedor FDS</span>
+                            </Link>
+                            
+                            <Link
+                                href={`${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3031'}/login`}
+                                className="group bg-transparent hover:bg-white/5 text-white border-2 border-indigo-400 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 hover:-translate-y-1"
+                            >
+                                <span>Iniciar Sesión</span>
                             </Link>
                         </div>
 
@@ -263,7 +270,7 @@ export default function LandingPage() {
                         Rentabiliza tus impresoras sin gastar en fuerza de ventas. FDS centraliza requerimientos industriales masivos. Olvídate de cobrar y negociar: Ofertá, adjudicaté y fabrica con el dinero asegurado.
                     </p>
                     <Link
-                        href={`${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3031'}/supplier/onboarding`}
+                        href={`${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3031'}/register/provider`}
                         className="bg-white text-slate-900 hover:bg-slate-100 px-8 py-4 rounded-xl text-lg font-bold transition-all shadow-xl hover:-translate-y-1 inline-flex items-center space-x-2"
                     >
                         <span>Postular mi Granja a FDS</span>

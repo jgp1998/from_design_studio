@@ -75,6 +75,14 @@ export class OrdersService {
     }
   }
 
+  async getClientOrders(clientId: string): Promise<WorkOrder[]> {
+    return this.workOrderRepository.find({
+      where: { client: { id: clientId } },
+      relations: ['files', 'bids', 'bids.provider'],
+      order: { createdAt: 'DESC' },
+    });
+  }
+
   async createDraftOrder(
     userId: string,
     dto: CreateOrderDraftDto,

@@ -1,4 +1,4 @@
-export type ViewType = 'landing' | 'client-new-bidding' | 'client-dashboard' | 'provider-dashboard' | 'provider-ot-detail' | 'store-catalog' | 'store-product-detail' | 'checkout';
+export type ViewType = 'landing' | 'client-new-bidding' | 'client-dashboard' | 'provider-dashboard' | 'provider-ot-detail' | 'store-catalog' | 'store-product-detail' | 'checkout' | 'login';
 export type UserRole = 'guest' | 'client' | 'provider';
 export interface CartItem {
   id: string;

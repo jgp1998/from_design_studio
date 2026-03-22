@@ -72,15 +72,26 @@ export function Header({ currentView, currentRole, onViewChange, onRoleChange, c
                     </div>
 
                     <div className="flex items-center space-x-4">
-                        <select
-                            value={currentRole}
-                            onChange={(e) => onRoleChange(e.target.value as UserRole)}
-                            className="hidden md:block bg-slate-800 text-white px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                            <option value="guest">Guest</option>
-                            <option value="client">Client</option>
-                            <option value="provider">Provider</option>
-                        </select>
+                        {currentRole === 'guest' ? (
+                            <button
+                                onClick={() => onViewChange('login')}
+                                className="hidden md:block text-sm font-medium hover:text-indigo-400 transition-colors"
+                            >
+                                Sign In
+                            </button>
+                        ) : (
+                            <div className="hidden md:flex items-center space-x-4">
+                                <span className="text-sm font-medium text-slate-300 capitalize bg-slate-800 px-3 py-1 rounded-full">
+                                    {currentRole}
+                                </span>
+                                <button
+                                    onClick={() => onRoleChange('guest')}
+                                    className="text-sm font-medium hover:text-indigo-400 transition-colors"
+                                >
+                                    Sign Out
+                                </button>
+                            </div>
+                        )}
 
                         <button
                             onClick={() => onViewChange('checkout')}
@@ -151,18 +162,27 @@ export function Header({ currentView, currentRole, onViewChange, onRoleChange, c
                                 </button>
                             )}
 
-                            <select
-                                value={currentRole}
-                                onChange={(e) => {
-                                    onRoleChange(e.target.value as UserRole);
-                                    setMobileMenuOpen(false);
-                                }}
-                                className="bg-slate-800 text-white px-3 py-2 rounded-lg border border-slate-700"
-                            >
-                                <option value="guest">Guest</option>
-                                <option value="client">Client</option>
-                                <option value="provider">Provider</option>
-                            </select>
+                            {currentRole === 'guest' ? (
+                                <button
+                                    onClick={() => {
+                                        onViewChange('login');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="bg-indigo-600 text-center text-white px-3 py-2 mt-4 rounded-lg font-medium hover:bg-indigo-700"
+                                >
+                                    Sign In
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        onRoleChange('guest');
+                                        setMobileMenuOpen(false);
+                                    }}
+                                    className="bg-slate-800 text-center text-red-400 px-3 py-2 mt-4 rounded-lg font-medium hover:bg-slate-700"
+                                >
+                                    Sign Out
+                                </button>
+                            )}
                         </nav>
                     </div>
                 )}

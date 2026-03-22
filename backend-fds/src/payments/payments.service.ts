@@ -81,11 +81,11 @@ export class PaymentsService {
     // In real life, verify cryptic signatures here
 
     await this.dataSource.transaction(async (manager) => {
-      const payment = await manager.findOne(Payment, {
-        where: { gatewayId },
-        relations: ['order'],
-        lock: { mode: 'pessimistic_write' },
-      });
+      const payment = await manager.createQueryBuilder(Payment, 'payment')
+        .innerJoinAndSelect('payment.order', 'order')
+        .where('payment.gatewayId = :gatewayId', { gatewayId })
+        .setLock('pessimistic_write')
+        .getOne();
 
       if (!payment) {
         this.logger.error(

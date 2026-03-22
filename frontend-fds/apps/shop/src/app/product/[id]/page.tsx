@@ -20,8 +20,8 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
     const handleViewChange = (view: string) => {
         if(view === 'landing') {
            window.location.href = process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3030';
-        } else if (view.startsWith('client') || view.startsWith('provider') || view === 'checkout') {
-            window.location.href = `${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3031'}`;
+        } else if (view.startsWith('client') || view.startsWith('provider') || view === 'checkout' || view === 'login') {
+            window.location.href = `${process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3031'}${view === 'login' ? '/login' : ''}`;
         }
     };
 

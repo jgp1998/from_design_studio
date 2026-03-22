@@ -18,8 +18,9 @@ body:json {
 }
 
 tests {
-  test("AUTH-002: Returns 200 OK and JWT token", function() {
-    expect(res.getStatus()).to.equal(200);
-    expect(res.getBody().accessToken).to.be.a('string');
+  test("AUTH-002: Returns 201 Created and JWT token", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody().token).to.be.a('string');
+    bru.setEnvVar("client_token", res.getBody().token);
   });
 }

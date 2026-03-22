@@ -1,12 +1,12 @@
 import { Upload, FileUp, Check, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
-import { ViewType } from '../types';
+import type { ViewType } from '../../../types';
 
-interface ClientNewBiddingProps {
-    onViewChange: (view: ViewType) => void;
-}
+import { useRouter } from 'next/navigation';
+import { API } from '../../../api';
 
-export function ClientNewBidding({ onViewChange }: ClientNewBiddingProps) {
+export function ClientNewBidding() {
+    const router = useRouter();
     const [dragActive, setDragActive] = useState(false);
     const [uploadedFile, setUploadedFile] = useState<string | null>(null);
     const [formData, setFormData] = useState({
@@ -45,14 +45,31 @@ export function ClientNewBidding({ onViewChange }: ClientNewBiddingProps) {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!uploadedFile || !formData.acceptNDA) return;
 
-        setShowSuccess(true);
-        setTimeout(() => {
-            onViewChange('client-dashboard');
-        }, 2000);
+        try {
+            // Simulated upload process using API.Orders
+            // 1. Get presigned URL
+            const initUpload = await API.Orders.initUploadCAD({ file_name: uploadedFile, file_size: 1024 * 1024 });
+            
+            // 2. Client creates draft order after successful upload
+            await API.Orders.createDraftOrder({
+                file_id: initUpload.file_id,
+                material: formData.material,
+                color: formData.color,
+                infill: 100
+            });
+
+            setShowSuccess(true);
+            setTimeout(() => {
+                router.push('/dashboard/client');
+            }, 2000);
+        } catch (error) {
+            console.error("Failed to create work order", error);
+            alert("Error creating work order");
+        }
     };
 
     if (showSuccess) {

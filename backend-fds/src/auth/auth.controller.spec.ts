@@ -63,9 +63,9 @@ describe('AuthController', () => {
 
   it('login should call service', async () => {
     const dto = { email: 'a@a.com', password: 'p' };
-    mockAuthService.login.mockResolvedValue({ access_token: 'token' });
+    mockAuthService.login.mockResolvedValue({ token: 'token', user: { id: 'usr', email: 'a@a.com', role: 'CLIENT' } });
     const result = await controller.login(dto);
     expect(service.login).toHaveBeenCalledWith(dto);
-    expect(result).toEqual({ access_token: 'token' });
+    expect(result).toEqual({ token: 'token', user: { id: 'usr', email: 'a@a.com', role: 'CLIENT' } });
   });
 });

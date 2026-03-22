@@ -1,17 +1,28 @@
 import { Filter, Search, Eye } from 'lucide-react';
 import { useState } from 'react';
-import { WorkOrder, ViewType } from '../types';
-import { mockAvailableWorkOrders } from '../mockData';
+import type { WorkOrder, ViewType } from '../../../types';
+import { mockAvailableWorkOrders } from '../../../mockData';
 
-interface ProviderDashboardProps {
-    onViewChange: (view: ViewType) => void;
-    onSelectWO: (woId: string) => void;
-}
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { API } from '../../../api';
 
-export function ProviderDashboard({ onViewChange, onSelectWO }: ProviderDashboardProps) {
-    const [workOrders] = useState<WorkOrder[]>(mockAvailableWorkOrders);
+export function ProviderDashboard() {
+    const router = useRouter();
+    const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
     const [materialFilter, setMaterialFilter] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState('');
+
+    useEffect(() => {
+        // Fetch real orders from the API
+        API.Orders.getOrders({ status: 'OPEN' })
+            .then(data => setWorkOrders(data || mockAvailableWorkOrders))
+            .catch(err => {
+                console.error("Failed to fetch orders from API:", err);
+                // Fallback to mock data if API is not running locally for this demo
+                setWorkOrders(mockAvailableWorkOrders);
+            });
+    }, []);
 
     const filteredOrders = workOrders.filter(wo => {
         const matchesMaterial = materialFilter === 'all' || wo.material === materialFilter;
@@ -21,8 +32,7 @@ export function ProviderDashboard({ onViewChange, onSelectWO }: ProviderDashboar
     });
 
     const handleViewDetails = (woId: string) => {
-        onSelectWO(woId);
-        onViewChange('provider-ot-detail');
+        router.push(`/dashboard/provider/orders/${woId}`);
     };
 
     return (

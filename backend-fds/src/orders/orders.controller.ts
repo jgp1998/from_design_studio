@@ -37,6 +37,13 @@ export class OrdersController {
       fileSizeBytes,
     );
   }
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.CLIENT)
+  @Get()
+  async getClientOrders(@Request() req: { user: { userId: string } }) {
+    return this.ordersService.getClientOrders(req.user.userId);
+  }
+
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.CLIENT)
